@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,13 +15,14 @@ import java.util.Objects;
 
 @Getter
 @ToString
-@Entity
 @Table(indexes = {
         @Index(columnList = "content"),
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
-public class Comment {
+@EntityListeners(AuditingEntityListener.class)
+@Entity
+public class Comment extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
