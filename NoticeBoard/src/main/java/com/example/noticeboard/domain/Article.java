@@ -7,20 +7,24 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @ToString
-@Entity
 @Table(indexes = {
         @Index(columnList = "title"),
         @Index(columnList = "hashtag"),
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
+@EntityListeners(AuditingEntityListener.class)
+@Entity
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +39,11 @@ public class Article {
 
     @Setter
     private String hashtag;
+
+    @OrderBy("id")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private final Set<Comment> comments = new LinkedHashSet<>();
 
     @CreatedDate
     @Column(nullable = false)
@@ -58,6 +67,7 @@ public class Article {
         this.content = content;
         this.hashtag = hashtag;
     }
+
 
     public static Article of(String title, String content, String hashtag) {
         return new Article(title, content, hashtag);
