@@ -1,4 +1,4 @@
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -7,7 +7,7 @@
     <title>게시판 페이지</title>
 </head>
 <body>
-<header th:replace="~{header :: header}"></header>
+<header id="header"></header>
 <main>
     <form>
         <label for="search-type" hidden>
@@ -77,6 +77,6 @@
         </table>
     </nav>
 </main>
-<footer th:replace="footer :: footer"></footer>
+<footer id="footer"></footer>
 </body>
 </html>
