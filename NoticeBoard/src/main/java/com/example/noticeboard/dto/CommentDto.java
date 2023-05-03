@@ -1,5 +1,7 @@
 package com.example.noticeboard.dto;
 
+import com.example.noticeboard.domain.Comment;
+
 import java.time.LocalDateTime;
 
 /**
@@ -14,5 +16,15 @@ public record CommentDto(
 ) {
     public static CommentDto of(LocalDateTime createdAt, String createdBy, LocalDateTime modifiedAt, String modifiedBy, String content) {
         return new CommentDto(createdAt, createdBy, modifiedAt, modifiedBy, content);
+    }
+
+    public static CommentDto from(Comment entity) {
+        return new CommentDto(
+                entity.getCreatedAt(),
+                entity.getCreatedBy(),
+                entity.getModifiedAt(),
+                entity.getModifiedBy(),
+                entity.getContent()
+        );
     }
 }
