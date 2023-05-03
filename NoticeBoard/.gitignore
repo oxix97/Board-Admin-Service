@@ -151,6 +151,9 @@ Temporary Items
 # iCloud generated files
 *.icloud
 
+### JPA Buddy
+.jpb/
+
 ### Gradle ###
 .gradle
 **/build/
