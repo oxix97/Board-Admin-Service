@@ -10,8 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
@@ -23,8 +25,8 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<CommentDto> searchComments(Long articleId) {
-        Stream<Comment> comments = articleRepository.findById(articleId).orElseThrow()
-                .getComments().stream();
-        return comments.map(CommentDto::from).toList();
+        Set<Comment> comments = articleRepository.findById(articleId).orElseThrow().getComments();
+
+        return comments.stream().map(CommentDto::from).toList();
     }
 }

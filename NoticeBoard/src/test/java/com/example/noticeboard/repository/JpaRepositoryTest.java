@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Import;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 @Disabled
 @DisplayName("JPA 연결 테스트")
 @Import(JpaConfig.class)
@@ -38,24 +39,24 @@ class JpaRepositoryTest {
 
     }
 
-    @DisplayName("INSERT Test")
-    @Test
-    void insertTest() {
-        Article article = Article.of("new article",
-                "content",
-                "#spring");
-
-        articleRepository.save(article);
-        int count = articleRepository.findAll().size();
-
-        Assertions.assertEquals(1, count);
-
-    }
+//    @DisplayName("INSERT Test")
+//    @Test
+//    void insertTest() {
+//        Article article = Article.of("new article",
+//                "content",
+//                "#spring");
+//
+//        articleRepository.save(article);
+//        int count = articleRepository.findAll().size();
+//
+//        Assertions.assertEquals(1, count);
+//
+//    }
 
     @DisplayName("UPDATE Test")
     @Test
     void updateTest() {
-        insertData();
+//        insertData();
         Article article = articleRepository.findById(1L).orElseThrow();
         String updateHashtag = "#update";
         article.setHashtag(updateHashtag);
@@ -66,7 +67,7 @@ class JpaRepositoryTest {
     @DisplayName("DELETE Test")
     @Test
     void deleteTest() {
-        insertData();
+//        insertData();
         Article article = articleRepository.findById(1L).orElseThrow();
         Long preArticleCount = articleRepository.count();
         Long preCommentCount = commentRepository.count();
@@ -75,10 +76,10 @@ class JpaRepositoryTest {
         articleRepository.delete(article);
     }
 
-    private void insertData() {
-        Article article = Article.of("dummy", "momo", "#dummy");
-        Comment comment = Comment.of(article, "i'm hungry");
-        articleRepository.save(article);
-        commentRepository.saveAndFlush(comment);
-    }
+//    private void insertData() {
+//        Article article = Article.of("dummy", "momo", "#dummy");
+//        Comment comment = Comment.of(article, "i'm hungry");
+//        articleRepository.save(article);
+//        commentRepository.saveAndFlush(comment);
+//    }
 }

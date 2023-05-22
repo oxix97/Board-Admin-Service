@@ -32,6 +32,11 @@ public class Comment extends AuditingFields {
     private Article article;
 
     @Setter
+    @JoinColumn(name = "userId")
+    @ManyToOne(optional = false)
+    private UserAccount userAccount; // 유저 정보 (ID)
+
+    @Setter
     @Column(nullable = false, length = 10000)
     private String content;
 
@@ -56,6 +61,17 @@ public class Comment extends AuditingFields {
         this.article = article;
         this.content = content;
     }
+
+    private Comment(Article article, UserAccount userAccount, String content) {
+        this.article = article;
+        this.userAccount = userAccount;
+        this.content = content;
+    }
+
+    public static Comment of(Article article, UserAccount userAccount, String content) {
+        return new Comment(article, userAccount, content);
+    }
+
 
     public static Comment of(Article article, String content) {
         return new Comment(article, content);

@@ -42,6 +42,21 @@ public record UserAccountDto(
         return new UserAccountDto(userId, userPassword, email, nickname, memo, null, null, null, null);
     }
 
+
+    public static UserAccountDto from(UserAccount entity) {
+        return new UserAccountDto(
+                entity.getUserId(),
+                entity.getUserPassword(),
+                entity.getEmail(),
+                entity.getNickname(),
+                entity.getMemo(),
+                entity.getCreatedAt(),
+                entity.getCreatedBy(),
+                entity.getModifiedAt(),
+                entity.getModifiedBy()
+        );
+    }
+
     public UserAccount toEntity(UserAccountDto dto) {
         return UserAccount.of(
                 dto.userId,
