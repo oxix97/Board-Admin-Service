@@ -42,7 +42,7 @@ public record CommentDto(
         );
     }
 
-    public Comment toEntity(Article article, UserAccount userAccount) {
+    public Comment toEntity(Article article, UserAccount userAccount, String content) {
         return Comment.of(
                 article,
                 userAccount,
