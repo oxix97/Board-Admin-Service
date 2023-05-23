@@ -63,8 +63,7 @@ public record UserAccountDto(
                 dto.userPassword,
                 dto.email,
                 dto.nickname,
-                dto.memo,
-                dto.createdBy
+                dto.memo
         );
     }
 }
