@@ -72,11 +72,6 @@ public class Comment extends AuditingFields {
         return new Comment(article, userAccount, content);
     }
 
-
-    public static Comment of(Article article, String content) {
-        return new Comment(article, content);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
