@@ -1,13 +1,13 @@
 package com.example.noticeboard.controller;
 
 import com.example.noticeboard.config.SecurityConfig;
-import com.example.noticeboard.dto.ArticleDto;
+import com.example.noticeboard.domain.type.SearchType;
 import com.example.noticeboard.dto.ArticleWithCommentDto;
 import com.example.noticeboard.dto.UserAccountDto;
 import com.example.noticeboard.service.ArticleService;
+import com.example.noticeboard.service.PaginationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,7 +31,10 @@ class ArticleControllerTest {
     private final MockMvc mvc;
 
     @MockBean
-    private ArticleService service;
+    private ArticleService articleService;
+
+    @MockBean
+    private PaginationService paginationService;
 
     public ArticleControllerTest(@Autowired MockMvc mvc) {
         this.mvc = mvc;
@@ -41,7 +44,7 @@ class ArticleControllerTest {
     @Test
     void test1() throws Exception {
         //given
-        given(service.searchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
+        given(articleService.searchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
 
         //when & then
         mvc.perform(get("/articles"))
@@ -51,17 +54,7 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("articles"));
 //                .andExpect(model().attributeExists("searchTypes"));
 
-        then(service).should().searchArticles(eq(null), eq(null), any(Pageable.class));
-    }
-
-    @DisplayName("[GET] 게시글 단건[1] - 정상 호출")
-    @Test
-    void test2() throws Exception {
-        Long articleId = 1L;
-        mvc.perform(get("/articles/" + articleId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(model().attributeExists("articles"));
+        then(articleService).should().searchArticles(eq(null), eq(null), any(Pageable.class));
     }
 
     @DisplayName("[GET] 게시글 상세페이지 - 정상 호출")
@@ -69,28 +62,44 @@ class ArticleControllerTest {
     void test3() throws Exception {
         Long id = 1L;
         //given
-        given(service.getArticle(id)).willReturn(createArticleWithCommentsDto());
+        given(articleService.getArticle(id)).willReturn(createArticleWithCommentsDto());
 
         //when
-        mvc.perform(get("/articles/"+id))
+        mvc.perform(get("/articles/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
                 .andExpect(model().attributeExists("comments"));
 
-        //then
-        then(service).should().getArticle(id);
+                  //then
+        then(articleService).should().getArticle(id);
 
     }
 
     @DisplayName("[GET] 게시글 검색 전용 페이지 - 정상 호출")
     @Test
     void test4() throws Exception {
-        mvc.perform(get("/articles"))
+        SearchType searchType = SearchType.TITLE;
+        String searchValue = "title";
+
+        //given
+        given(articleService.searchArticles(eq(searchType), eq(searchValue), any(Pageable.class))).willReturn(Page.empty());
+        given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
+
+        //when
+        mvc.perform(get("/articles")
+                        .queryParam("searchType", searchType.name())
+                        .queryParam("searchValue", searchValue))
                 .andExpect(status().isOk())
+                .andExpect(view().name("articles/index"))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(model().attributeExists("searchTypes"))
                 .andExpect(model().attributeExists("articles"));
+
+        //then
+        then(articleService).should().searchArticles(eq(searchType), eq(searchValue), any(Pageable.class));
+        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
     @DisplayName("[GET] 게시글 해시태그 검색 페이지 - 정상 호출")
