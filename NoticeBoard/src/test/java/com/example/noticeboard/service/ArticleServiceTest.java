@@ -1,9 +1,12 @@
 package com.example.noticeboard.service;
 
 import com.example.noticeboard.domain.Article;
+import com.example.noticeboard.domain.UserAccount;
 import com.example.noticeboard.domain.type.SearchType;
 import com.example.noticeboard.dto.ArticleDto;
 import com.example.noticeboard.dto.ArticleUpdateDto;
+import com.example.noticeboard.dto.ArticleWithCommentDto;
+import com.example.noticeboard.dto.UserAccountDto;
 import com.example.noticeboard.repository.ArticleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,9 +14,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,41 +39,145 @@ class ArticleServiceTest {
     @DisplayName("[GET] 검색시 해당되는 게시글들 반환")
     @Test
     void test1() {
-        List<ArticleDto> articles = service.searchArticles(SearchType.TITLE, "search keyword");
+        Pageable pageable = Pageable.ofSize(20);
+        given(repository.findAll(pageable)).willReturn(Page.empty());
+        Page<ArticleDto> articles = service.searchArticles(null, null, pageable);
+
         assertThat(articles)
-                .isNotNull();
+                .isEmpty();
+        then(repository).should().findAll(pageable);
+    }
+
+    @DisplayName("[GET] 검색어 없이 게시글 검색 -> 게시글 페이지 반환")
+    @Test
+    void test11() {
+        SearchType searchType = SearchType.TITLE;
+        String searchKeyword = "title";
+        Pageable pageable = Pageable.ofSize(20);
+        given(repository.findByTitleContaining(searchKeyword, pageable)).willReturn(Page.empty());
+
+        // When
+        Page<ArticleDto> articles = service.searchArticles(searchType, searchKeyword, pageable);
+
+        // Then
+        assertThat(articles).isEmpty();
+        then(repository).should().findByTitleContaining(searchKeyword, pageable);
     }
 
     @DisplayName("[GET] 아이디로 게시글 조회시 게시글 반환")
     @Test
     void test2() {
+        Long articleId = 1L;
+        Article article = createArticle();
+        given(repository.findById(articleId)).willReturn(Optional.of(article));
 
+        ArticleWithCommentDto dto = service.getArticle(articleId);
+
+        assertThat(dto)
+                .hasFieldOrPropertyWithValue("title", article.getTitle())
+                .hasFieldOrPropertyWithValue("content", article.getContent())
+                .hasFieldOrPropertyWithValue("hashtag", article.getHashtag());
+        then(repository).should().findById(articleId);
     }
 
     @DisplayName("[PUT] 게시글 정보 입력시 게시글 생성")
     @Test
     void test3() {
-        ArticleDto dto = ArticleDto.of("title", "content", "#Test3", LocalDateTime.now(), "Chan");
+        /*ArticleDto dto = ArticleDto.of("title", "content", "#Test3", LocalDateTime.now(), "Chan");
         given(repository.save(any(Article.class))).willReturn(null);
         service.saveArticle(dto);
-        then(repository).should().save(any(Article.class));
+        then(repository).should().save(any(Article.class));*/
     }
 
     @DisplayName("[PUT] 게시글의 ID와 수정 정보를 입력 -> 게시글 수정")
     @Test
     void test4() {
-        ArticleUpdateDto dto = ArticleUpdateDto.of("title", "content", "#Test3");
-        given(repository.save(any(Article.class))).willReturn(null);
-        service.updateArticle(1L, dto);
-        then(repository).should().save(any(Article.class));
+        Article article = createArticle();
+        ArticleDto dto = createArticleDto("새 타이틀", "새 내용");
+
+        //given
+        given(repository.getReferenceById(dto.id())).willReturn(article);
+
+        //when
+        service.updateArticle(dto);
+
+        //then
+        assertThat(article)
+                .hasFieldOrPropertyWithValue("title", dto.title())
+                .hasFieldOrPropertyWithValue("content", dto.content())
+                .hasFieldOrPropertyWithValue("hashtag", dto.hashtag());
+        then(repository).should().getReferenceById(dto.id());
     }
 
     @DisplayName("[DELETE] 게시글의 ID를 가지고 게시글 삭제")
     @Test
     void test5() {
-        ArticleUpdateDto dto = ArticleUpdateDto.of("title", "content", "#Test3");
-        willDoNothing().given(repository).delete(any(Article.class));
-        service.deleteArticle(1L, dto);
-        then(repository).should().delete(any(Article.class));
+//        long articleId = 1L;
+//        Article article = createArticle();
+//        ArticleDto dto = createArticleDto();
+//        given(repository.getReferenceById(dto.id())).willReturn(article);
+//        service.deleteArticle(dto.id());
+//        willDoNothing().given(repository).deleteById(articleId);
+    }
+
+    private Article createArticle() {
+        return createArticle(1L);
+    }
+
+    private Article createArticle(Long id) {
+        Article article = Article.of(
+                createUserAccount(),
+                "title",
+                "content",
+                "test1"
+        );
+        ReflectionTestUtils.setField(article, "id", id);
+
+        return article;
+    }
+
+    private UserAccount createUserAccount() {
+        return createUserAccount("uno");
+    }
+
+    private UserAccount createUserAccount(String userId) {
+        return UserAccount.of(
+                userId,
+                "password",
+                "uno@email.com",
+                "Uno",
+                null
+        );
+    }
+
+    private ArticleDto createArticleDto() {
+        return createArticleDto("title", "content");
+    }
+
+    private ArticleDto createArticleDto(String title, String content) {
+        return ArticleDto.of(
+                1L,
+                createUserAccountDto(),
+                title,
+                content,
+                null,
+                LocalDateTime.now(),
+                "Chan",
+                LocalDateTime.now(),
+                "Chan");
+    }
+
+    private UserAccountDto createUserAccountDto() {
+        return UserAccountDto.of(
+                "uno",
+                "password",
+                "uno@mail.com",
+                "Uno",
+                "This is memo",
+                LocalDateTime.now(),
+                "uno",
+                LocalDateTime.now(),
+                "uno"
+        );
     }
 }

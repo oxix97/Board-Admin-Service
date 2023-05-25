@@ -26,11 +26,12 @@ public class AuditingFields {
 
     @CreatedBy
     @Column(nullable = false, length = 100, updatable = false)
-    private String createdBy;
+    String createdBy;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @LastModifiedDate
     private LocalDateTime modifiedAt;
+
     @LastModifiedBy
-    private String modifiedBy;
+    String modifiedBy;
 }

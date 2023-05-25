@@ -10,7 +10,7 @@ logging:
 spring:
   datasource:
     url: "jdbc:mysql://localhost:3306/board"
-    username: "oxix"
+    username: "chan"
     password: "123"
   jpa:
     open-in-view: false
