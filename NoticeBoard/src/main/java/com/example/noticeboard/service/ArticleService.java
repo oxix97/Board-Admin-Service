@@ -1,11 +1,15 @@
 package com.example.noticeboard.service;
 
 import com.example.noticeboard.domain.Article;
+import com.example.noticeboard.domain.UserAccount;
 import com.example.noticeboard.domain.type.SearchType;
 import com.example.noticeboard.dto.ArticleDto;
 import com.example.noticeboard.dto.ArticleUpdateDto;
 import com.example.noticeboard.dto.ArticleWithCommentDto;
+import com.example.noticeboard.dto.HashtagDto;
 import com.example.noticeboard.repository.ArticleRepository;
+import com.example.noticeboard.repository.HashtagRepository;
+import com.example.noticeboard.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -21,6 +28,8 @@ import javax.persistence.EntityNotFoundException;
 @Slf4j
 public class ArticleService {
     private final ArticleRepository repository;
+    private final UserAccountRepository userAccountRepository;
+    private final HashtagRepository hashtagRepository;
 
     @Transactional(readOnly = true)
     public Page<ArticleDto> searchArticles(SearchType searchType, String searchKeyword, Pageable pageable) {
@@ -33,19 +42,28 @@ public class ArticleService {
             case ID -> repository.findByUserAccount_UserIdContaining(searchKeyword, pageable).map(ArticleDto::from);
             case NICKNAME ->
                     repository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
-            case HASHTAG -> repository.findByHashtag("#" + searchKeyword, pageable).map(ArticleDto::from);
+            case HASHTAG ->
+                    repository.findByHashtagNames(Arrays.stream(searchKeyword.split(" ")).toList(), pageable).map(ArticleDto::from);
         };
     }
 
     @Transactional(readOnly = true)
-    public ArticleWithCommentDto getArticle(Long articleId) {
+    public ArticleDto getArticle(Long articleId) {
+        return repository.findById(articleId)
+                .map(ArticleDto::from)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleWithCommentDto getArticleWithComments(Long articleId) {
         return repository.findById(articleId)
                 .map(ArticleWithCommentDto::from)
-                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다. - articleId : " + articleId));
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
     }
 
     public void saveArticle(ArticleDto dto) {
-        repository.save(dto.toEntity());
+        UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
+        repository.save(dto.toEntity(userAccount));
     }
 
     public void updateArticle(ArticleDto dto) {
@@ -53,7 +71,7 @@ public class ArticleService {
             Article article = repository.getReferenceById(dto.id());
             if (dto.title() != null) article.setTitle(dto.title());
             if (dto.content() != null) article.setContent(dto.content());
-            article.setHashtag(dto.hashtag());
+            article.addHashtags(dto.hashtagDtos().stream().map(HashtagDto::toEntity).collect(Collectors.toSet()));
         } catch (EntityNotFoundException e) {
             log.info("게시글 업데이트 실패. 게시글을 찾을 수 없습니다. - dto : {}", dto);
         }
@@ -61,5 +79,18 @@ public class ArticleService {
 
     public void deleteArticle(long articleId) {
         repository.deleteById(articleId);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ArticleDto> searchArticlesViaHashtag(String hashtag, Pageable pageable) {
+        if (hashtag == null || hashtag.isBlank()) {
+            return Page.empty(pageable);
+        }
+        return repository.findByHashtagNames(List.of(hashtag), pageable).map(ArticleDto::from);
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> getHashtags() {
+        return repository.findAllDistinctHashtags();
     }
 }
