@@ -1,6 +1,7 @@
 package com.example.noticeboard.dto.response;
 
 import com.example.noticeboard.dto.ArticleDto;
+import com.example.noticeboard.dto.HashtagDto;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -10,14 +11,14 @@ public record ArticleResponse(
         Long id,
         String title,
         String content,
-        String hashtag,
+        Set<HashtagDto> hashtags,
         LocalDateTime createdAt,
         String email,
         String nickname
 ) {
 
-    public static ArticleResponse of(Long id, String title, String content, String hashtag, LocalDateTime createdAt, String email, String nickname) {
-        return new ArticleResponse(id, title, content, hashtag, createdAt, email, nickname);
+    public static ArticleResponse of(Long id, String title, String content, Set<HashtagDto> hashtags, LocalDateTime createdAt, String email, String nickname) {
+        return new ArticleResponse(id, title, content, hashtags, createdAt, email, nickname);
     }
 
     public static ArticleResponse from(ArticleDto dto) {
@@ -30,7 +31,7 @@ public record ArticleResponse(
                 dto.id(),
                 dto.title(),
                 dto.content(),
-                dto.hashtag(),
+                dto.hashtagDtos(),
                 dto.createdAt(),
                 dto.userAccountDto().email(),
                 nickname
