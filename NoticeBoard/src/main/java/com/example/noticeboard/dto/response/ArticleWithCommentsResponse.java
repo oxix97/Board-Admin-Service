@@ -1,7 +1,9 @@
 package com.example.noticeboard.dto.response;
 
+import com.example.noticeboard.domain.Hashtag;
 import com.example.noticeboard.dto.ArticleWithCommentDto;
 import com.example.noticeboard.dto.CommentDto;
+import com.example.noticeboard.dto.HashtagDto;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -12,7 +14,7 @@ public record ArticleWithCommentsResponse(
         Long id,
         String title,
         String content,
-        String hashtag,
+        Set<HashtagDto> hashtags,
         LocalDateTime createdAt,
         String email,
         String nickname,
@@ -20,8 +22,8 @@ public record ArticleWithCommentsResponse(
         Set<CommentResponse> articleCommentsResponse
 ) {
 
-    public static ArticleWithCommentsResponse of(Long id, String title, String content, String hashtag, LocalDateTime createdAt, String email, String nickname, String userId, Set<CommentResponse> CommentResponses) {
-        return new ArticleWithCommentsResponse(id, title, content, hashtag, createdAt, email, nickname, userId, CommentResponses);
+    public static ArticleWithCommentsResponse of(Long id, String title, String content, Set<HashtagDto> hashtags, LocalDateTime createdAt, String email, String nickname, String userId, Set<CommentResponse> CommentResponses) {
+        return new ArticleWithCommentsResponse(id, title, content, hashtags, createdAt, email, nickname, userId, CommentResponses);
     }
 
     public static ArticleWithCommentsResponse from(ArticleWithCommentDto dto) {
@@ -34,7 +36,7 @@ public record ArticleWithCommentsResponse(
                 dto.id(),
                 dto.title(),
                 dto.content(),
-                dto.hashtag(),
+                dto.hashtags(),
                 dto.createdAt(),
                 dto.userAccountDto().email(),
                 nickname,

@@ -1,6 +1,7 @@
 package com.example.noticeboard.dto;
 
 import com.example.noticeboard.domain.Article;
+import com.example.noticeboard.domain.Hashtag;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
@@ -16,7 +17,7 @@ public record ArticleWithCommentDto(
         Set<CommentDto> articleWithCommentDtos,
         String title,
         String content,
-        String hashtag,
+        Set<HashtagDto> hashtags,
         LocalDateTime createdAt,
         String createdBy,
         LocalDateTime modifiedAt,
@@ -24,17 +25,17 @@ public record ArticleWithCommentDto(
 ) {
     public static ArticleWithCommentDto of(
             Long id,
-            String title,
             UserAccountDto userAccountDto,
             Set<CommentDto> articleWithCommentDtos,
+            String title,
             String content,
-            String hashtag,
+            Set<HashtagDto> hashtags,
             LocalDateTime createdAt,
             String createdBy,
             LocalDateTime modifiedAt,
             String modifiedBy
     ) {
-        return new ArticleWithCommentDto(id, userAccountDto, articleWithCommentDtos, title, content, hashtag, createdAt, createdBy, modifiedAt, modifiedBy);
+        return new ArticleWithCommentDto(id, userAccountDto, articleWithCommentDtos, title, content, hashtags, createdAt, createdBy, modifiedAt, modifiedBy);
     }
 
     public static ArticleWithCommentDto of(
@@ -42,11 +43,11 @@ public record ArticleWithCommentDto(
             Set<CommentDto> articleWithCommentDtos,
             String title,
             String content,
-            String hashtag,
+            Set<HashtagDto> hashtags,
             LocalDateTime createdAt,
             String createdBy
     ) {
-        return new ArticleWithCommentDto(null, userAccountDto, articleWithCommentDtos, title, content, hashtag, createdAt, createdBy, null, null);
+        return new ArticleWithCommentDto(null, userAccountDto, articleWithCommentDtos, title, content, hashtags, createdAt, createdBy, null, null);
     }
 
     public static ArticleWithCommentDto of(
@@ -54,11 +55,11 @@ public record ArticleWithCommentDto(
             UserAccountDto userAccountDto,
             String title,
             String content,
-            String hashtag,
+            Set<HashtagDto> hashtags,
             LocalDateTime createdAt,
             String createdBy
     ) {
-        return new ArticleWithCommentDto(id, userAccountDto, Set.of(), title, content, hashtag, createdAt, createdBy, null, null);
+        return new ArticleWithCommentDto(id, userAccountDto, Set.of(), title, content, hashtags, createdAt, createdBy, null, null);
     }
 
     public static ArticleWithCommentDto from(Article entity) {
@@ -70,7 +71,7 @@ public record ArticleWithCommentDto(
                         .collect(Collectors.toCollection(LinkedHashSet::new)),
                 entity.getTitle(),
                 entity.getContent(),
-                entity.getHashtag(),
+                entity.getHashtags().stream().map(HashtagDto::from).collect(Collectors.toSet()),
                 entity.getCreatedAt(),
                 entity.getCreatedBy(),
                 entity.getModifiedAt(),
