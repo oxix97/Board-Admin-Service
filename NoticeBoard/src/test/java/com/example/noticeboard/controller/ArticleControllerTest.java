@@ -2,10 +2,11 @@ package com.example.noticeboard.controller;
 
 import com.example.noticeboard.config.SecurityConfig;
 import com.example.noticeboard.domain.type.SearchType;
-import com.example.noticeboard.dto.ArticleWithCommentDto;
-import com.example.noticeboard.dto.UserAccountDto;
+import com.example.noticeboard.dto.*;
+import com.example.noticeboard.dto.request.ArticleRequest;
 import com.example.noticeboard.service.ArticleService;
 import com.example.noticeboard.service.PaginationService;
+import com.example.noticeboard.util.FormDataEncoder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +20,21 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.BDDMockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, FormDataEncoder.class})
 @DisplayName("View Controller - 게시글")
 @WebMvcTest(ArticleController.class)
 class ArticleControllerTest {
     private final MockMvc mvc;
+
+    private final FormDataEncoder formDataEncoder;
 
     @MockBean
     private ArticleService articleService;
@@ -36,8 +42,11 @@ class ArticleControllerTest {
     @MockBean
     private PaginationService paginationService;
 
-    public ArticleControllerTest(@Autowired MockMvc mvc) {
+    public ArticleControllerTest(
+            @Autowired MockMvc mvc,
+            @Autowired FormDataEncoder formDataEncoder) {
         this.mvc = mvc;
+        this.formDataEncoder = formDataEncoder;
     }
 
     @DisplayName("[GET] 게시글 리스트 - 정상 호출")
@@ -72,7 +81,7 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("article"))
                 .andExpect(model().attributeExists("comments"));
 
-                  //then
+        //then
         then(articleService).should().getArticle(id);
 
     }
@@ -102,22 +111,77 @@ class ArticleControllerTest {
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
-    @DisplayName("[GET] 게시글 해시태그 검색 페이지 - 정상 호출")
+    @DisplayName("[GET] 게시글 해시태그 검색 페이지 (해시태그 없는) - 정상 호출")
     @Test
     void test5() throws Exception {
-        mvc.perform(get("/articles/hashtag"))
+        //given
+        List<String> hashtags = List.of("#java", "#spring", "#boot");
+        given(articleService.searchArticlesViaHashtag(eq(null), any(Pageable.class))).willReturn(Page.empty());
+        given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(1, 2, 3, 4, 5));
+        given(articleService.getHashtags()).willReturn(hashtags);
+
+        //when
+        mvc.perform(get("/articles/search-hashtag"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(model().attributeExists("articles"));
+                .andExpect(view().name("articles/search-hashtag"))
+                .andExpect(model().attributeExists("articles"))
+                .andExpect(model().attribute("hashtags", hashtags))
+                .andExpect(model().attribute("searchType", SearchType.HASHTAG))
+                .andExpect(model().attributeExists("paginationBarNumbers"));
+
+        //then
+        then(articleService).should().searchArticlesViaHashtag(eq(null), any(Pageable.class));
+        then(articleService).should().getHashtags();
+        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
+    }
+
+    @DisplayName("[GET] 게시글 해시태그 검색 페이지 (해시태그 있는) - 정상 호출")
+    @Test
+    void test6() throws Exception {
+        //given
+        String hashtag = "#java";
+        List<String> hashtags = List.of("#java", "#spring", "#boot");
+        given(articleService.searchArticlesViaHashtag(eq(hashtag), any(Pageable.class))).willReturn(Page.empty());
+        given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(1, 2, 3, 4, 5));
+        given(articleService.getHashtags()).willReturn(hashtags);
+
+        //when
+        mvc.perform(get("/articles/search-hashtag")
+                        .queryParam("searchValue", hashtag))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(view().name("articles/search-hashtag"))
+                .andExpect(model().attribute("articles", Page.empty()))
+                .andExpect(model().attribute("hashtags", hashtags))
+                .andExpect(model().attribute("searchType", SearchType.HASHTAG))
+                .andExpect(model().attributeExists("paginationBarNumbers"));
+
+        //then
+        then(articleService).should().searchArticlesViaHashtag(eq(hashtag), any(Pageable.class));
+        then(articleService).should().getHashtags();
+        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
+    }
+
+    private ArticleDto createArticleDto() {
+        return ArticleDto.of(
+                createUserAccountDto(),
+                "title",
+                "content",
+                Set.of(HashtagDto.of("java"))
+        );
     }
 
     private ArticleWithCommentDto createArticleWithCommentsDto() {
         return ArticleWithCommentDto.of(
                 1L,
                 createUserAccountDto(),
+                Set.of(),
                 "title",
                 "content",
-                "hashtag",
+                Set.of(HashtagDto.of("java")),
+                LocalDateTime.now(),
+                "uno",
                 LocalDateTime.now(),
                 "uno"
         );
