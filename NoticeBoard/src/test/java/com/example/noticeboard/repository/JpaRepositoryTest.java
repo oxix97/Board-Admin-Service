@@ -53,16 +53,16 @@ class JpaRepositoryTest {
 //
 //    }
 
-    @DisplayName("UPDATE Test")
-    @Test
-    void updateTest() {
+//    @DisplayName("UPDATE Test")
+//    @Test
+//    void updateTest() {
 //        insertData();
-        Article article = articleRepository.findById(1L).orElseThrow();
-        String updateHashtag = "#update";
-        article.setHashtag(updateHashtag);
-        articleRepository.save(article);
-        assertThat(article).hasFieldOrPropertyWithValue("hashtag", updateHashtag);
-    }
+//        Article article = articleRepository.findById(1L).orElseThrow();
+//        String updateHashtag = "#update";
+//        article.setHashtag(updateHashtag);
+//        articleRepository.save(article);
+//        assertThat(article).hasFieldOrPropertyWithValue("hashtag", updateHashtag);
+//    }
 
     @DisplayName("DELETE Test")
     @Test

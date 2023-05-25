@@ -3,10 +3,7 @@ package com.example.noticeboard.service;
 import com.example.noticeboard.domain.Article;
 import com.example.noticeboard.domain.UserAccount;
 import com.example.noticeboard.domain.type.SearchType;
-import com.example.noticeboard.dto.ArticleDto;
-import com.example.noticeboard.dto.ArticleUpdateDto;
-import com.example.noticeboard.dto.ArticleWithCommentDto;
-import com.example.noticeboard.dto.UserAccountDto;
+import com.example.noticeboard.dto.*;
 import com.example.noticeboard.repository.ArticleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,20 +45,47 @@ class ArticleServiceTest {
         then(repository).should().findAll(pageable);
     }
 
-    @DisplayName("[GET] 검색어 없이 게시글 검색 -> 게시글 페이지 반환")
+    @DisplayName("[GET] 검색어 없이 게시글 해시태그 검색  -> 빈 페이지 반환")
     @Test
     void test11() {
-        SearchType searchType = SearchType.TITLE;
-        String searchKeyword = "title";
         Pageable pageable = Pageable.ofSize(20);
-        given(repository.findByTitleContaining(searchKeyword, pageable)).willReturn(Page.empty());
 
         // When
-        Page<ArticleDto> articles = service.searchArticles(searchType, searchKeyword, pageable);
+        Page<ArticleDto> articles = service.searchArticlesViaHashtag(null, pageable);
+
+        // Then
+        assertThat(articles).isEqualTo(Page.empty(pageable));
+        then(repository).shouldHaveNoInteractions();
+    }
+
+    @DisplayName("[GET] 해시태그 검색 -> 게시글 페이지 반환")
+    @Test
+    void test12() {
+        String hashtag = "#java";
+        Pageable pageable = Pageable.ofSize(20);
+        given(repository.findByHashtagNames(List.of(hashtag), pageable)).willReturn(Page.empty(pageable));
+
+        // When
+        Page<ArticleDto> articles = service.searchArticlesViaHashtag(hashtag, pageable);
 
         // Then
         assertThat(articles).isEmpty();
-        then(repository).should().findByTitleContaining(searchKeyword, pageable);
+        then(repository).should().findByHashtagNames(List.of(hashtag), pageable);
+    }
+
+    @DisplayName("[GET] 해시태그 조회시, 해시태그 리스트 반환")
+    @Test
+    void test13() {
+        //given
+        List<String> expectedHashtags = List.of("#java", "#spring", "#boot");
+        given(repository.findAllDistinctHashtags()).willReturn(expectedHashtags);
+
+        //when
+        List<String> actualHashtags = service.getHashtags();
+
+        //then
+        assertThat(actualHashtags).isEqualTo(expectedHashtags);
+        then(repository).should().findAllDistinctHashtags();
     }
 
     @DisplayName("[GET] 아이디로 게시글 조회시 게시글 반환")
@@ -76,7 +100,7 @@ class ArticleServiceTest {
         assertThat(dto)
                 .hasFieldOrPropertyWithValue("title", article.getTitle())
                 .hasFieldOrPropertyWithValue("content", article.getContent())
-                .hasFieldOrPropertyWithValue("hashtag", article.getHashtag());
+                .hasFieldOrPropertyWithValue("hashtags", article.getHashtags());
         then(repository).should().findById(articleId);
     }
 
@@ -105,7 +129,7 @@ class ArticleServiceTest {
         assertThat(article)
                 .hasFieldOrPropertyWithValue("title", dto.title())
                 .hasFieldOrPropertyWithValue("content", dto.content())
-                .hasFieldOrPropertyWithValue("hashtag", dto.hashtag());
+                .hasFieldOrPropertyWithValue("hashtags", dto.hashtagDtos().stream().map(HashtagDto::hashtagName));
         then(repository).should().getReferenceById(dto.id());
     }
 
@@ -128,8 +152,7 @@ class ArticleServiceTest {
         Article article = Article.of(
                 createUserAccount(),
                 "title",
-                "content",
-                "test1"
+                "content"
         );
         ReflectionTestUtils.setField(article, "id", id);
 
