@@ -1,5 +1,7 @@
 package com.example.noticeboard.controller;
 
+import com.example.noticeboard.domain.Article;
+import com.example.noticeboard.domain.security.BoardPrincipal;
 import com.example.noticeboard.domain.type.FormStatus;
 import com.example.noticeboard.domain.type.SearchType;
 import com.example.noticeboard.dto.ArticleDto;
@@ -10,10 +12,12 @@ import com.example.noticeboard.dto.response.ArticleWithCommentsResponse;
 import com.example.noticeboard.service.ArticleService;
 import com.example.noticeboard.service.PaginationService;
 import lombok.RequiredArgsConstructor;
+import org.h2.engine.Mode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -69,34 +73,53 @@ public class ArticleController {
         List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
         map.addAttribute("articles", articles);
         map.addAttribute("hashtags", hashtags);
+        map.addAttribute("searchType", SearchType.HASHTAG);
         map.addAttribute("paginationBarNumbers", barNumbers);
-
         return "articles/search-hashtag";
     }
 
-
-    @PostMapping("/{articleId}/form")
-    public String updateArticle(
+    @PostMapping("/{articleId}/delete")
+    public String deleteArticle(
             @PathVariable Long articleId,
-            ArticleRequest request
+            @AuthenticationPrincipal BoardPrincipal boardPrincipal
     ) {
-        // TODO: 2023/05/25 인증 정보를 추후에 넣어야 한다.
-
-//        articleService.updateArticle(articleId, request.toDto(UserAccountDto.from(request.)));
-        return "redirect:/articles/" + articleId;
+        articleService.deleteArticle(articleId, boardPrincipal.getUsername());
+        return "redirect:/articles";
     }
 
-    @GetMapping("/{articleId}/form")
+    @GetMapping("/form")
+    public String articleForm(ModelMap map) {
+        map.addAttribute("formStatus", FormStatus.CREATE);
+        return "articles/form";
+    }
+
+    @PostMapping("/form")
+    public String postNewArticle(
+            @AuthenticationPrincipal BoardPrincipal boardPrincipal,
+            ArticleRequest request
+    ) {
+        articleService.saveArticle(request.toDto(boardPrincipal.toDto()));
+        return "redirect:/articles";
+    }
+
+    @GetMapping("/form/{articleId}")
     public String updateArticleForm(
             @PathVariable Long articleId,
             ModelMap map
     ) {
-
         ArticleResponse article = ArticleResponse.from(articleService.getArticle(articleId));
-
         map.addAttribute("article", article);
         map.addAttribute("formStatus", FormStatus.UPDATE);
         return "articles/form";
     }
 
+    @PostMapping("/form/{articleId}")
+    public String updateArticle(
+            @PathVariable Long articleId,
+            @AuthenticationPrincipal BoardPrincipal boardPrincipal,
+            ArticleRequest request
+    ) {
+        articleService.updateArticle(articleId, request.toDto(boardPrincipal.toDto()));
+        return "redirect:/articles";
+    }
 }
