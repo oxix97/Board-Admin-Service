@@ -66,9 +66,9 @@ public class ArticleService {
         repository.save(dto.toEntity(userAccount));
     }
 
-    public void updateArticle(ArticleDto dto) {
+    public void updateArticle(Long id, ArticleDto dto) {
         try {
-            Article article = repository.getReferenceById(dto.id());
+            Article article = repository.getReferenceById(id);
             if (dto.title() != null) article.setTitle(dto.title());
             if (dto.content() != null) article.setContent(dto.content());
             article.addHashtags(dto.hashtagDtos().stream().map(HashtagDto::toEntity).collect(Collectors.toSet()));
@@ -77,8 +77,8 @@ public class ArticleService {
         }
     }
 
-    public void deleteArticle(long articleId) {
-        repository.deleteById(articleId);
+    public void deleteArticle(long articleId, String userId) {
+        repository.deleteByIdAndUserAccount_UserId(articleId, userId);
     }
 
     @Transactional(readOnly = true)

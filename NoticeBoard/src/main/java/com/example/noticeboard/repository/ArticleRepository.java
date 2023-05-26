@@ -45,4 +45,6 @@ public interface ArticleRepository extends
         bindings.bind(root.createdAt).first(DateTimeExpression::eq);
         bindings.bind(root.createdBy).first(StringExpression::containsIgnoreCase);
     }
+
+    void deleteByIdAndUserAccount_UserId(long articleId, String userId);
 }

@@ -95,7 +95,7 @@ class ArticleServiceTest {
         Article article = createArticle();
         given(repository.findById(articleId)).willReturn(Optional.of(article));
 
-        ArticleWithCommentDto dto = service.getArticle(articleId);
+        ArticleWithCommentDto dto = service.getArticleWithComments(articleId);
 
         assertThat(dto)
                 .hasFieldOrPropertyWithValue("title", article.getTitle())
@@ -116,6 +116,7 @@ class ArticleServiceTest {
     @DisplayName("[PUT] 게시글의 ID와 수정 정보를 입력 -> 게시글 수정")
     @Test
     void test4() {
+        long articleId = 1L;
         Article article = createArticle();
         ArticleDto dto = createArticleDto("새 타이틀", "새 내용");
 
@@ -123,7 +124,7 @@ class ArticleServiceTest {
         given(repository.getReferenceById(dto.id())).willReturn(article);
 
         //when
-        service.updateArticle(dto);
+        service.updateArticle(articleId, dto);
 
         //then
         assertThat(article)

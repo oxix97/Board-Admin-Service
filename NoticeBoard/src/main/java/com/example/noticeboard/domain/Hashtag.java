@@ -24,7 +24,7 @@ public class Hashtag extends AuditingFields {
     private Long id;
 
     @ToString.Exclude
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "hashtags")
     private Set<Article> articles = new LinkedHashSet<>();
 
     @Setter
