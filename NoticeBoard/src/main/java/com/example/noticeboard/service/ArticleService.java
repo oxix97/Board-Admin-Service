@@ -1,6 +1,7 @@
 package com.example.noticeboard.service;
 
 import com.example.noticeboard.domain.Article;
+import com.example.noticeboard.domain.Hashtag;
 import com.example.noticeboard.domain.UserAccount;
 import com.example.noticeboard.domain.type.SearchType;
 import com.example.noticeboard.dto.ArticleDto;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -71,7 +73,9 @@ public class ArticleService {
             Article article = repository.getReferenceById(id);
             if (dto.title() != null) article.setTitle(dto.title());
             if (dto.content() != null) article.setContent(dto.content());
-            article.addHashtags(dto.hashtagDtos().stream().map(HashtagDto::toEntity).collect(Collectors.toSet()));
+            Set<Hashtag> hashtags = dto.hashtagDtos().stream().map(HashtagDto::toEntity).collect(Collectors.toSet());
+            article.addHashtags(hashtags);
+            repository.save(article);
         } catch (EntityNotFoundException e) {
             log.info("게시글 업데이트 실패. 게시글을 찾을 수 없습니다. - dto : {}", dto);
         }
@@ -92,5 +96,10 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public List<String> getHashtags() {
         return repository.findAllDistinctHashtags();
+    }
+
+    @Transactional(readOnly = true)
+    public long getArticleCount() {
+        return repository.count();
     }
 }

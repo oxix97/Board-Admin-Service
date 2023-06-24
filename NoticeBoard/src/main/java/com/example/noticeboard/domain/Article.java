@@ -1,25 +1,17 @@
 package com.example.noticeboard.domain;
 
-import com.example.noticeboard.dto.CommentDto;
-import com.example.noticeboard.dto.UserAccountDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
 @ToString
 @Table(indexes = {
         @Index(columnList = "title"),
-        @Index(columnList = "hashtag"),
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
@@ -52,8 +44,7 @@ public class Article extends AuditingFields {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Hashtag> hashtags = new LinkedHashSet<>();
 
-
-    @OrderBy("id")
+    @OrderBy("createdAt DESC")
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     @ToString.Exclude
     private final Set<Comment> comments = new LinkedHashSet<>();
@@ -84,12 +75,8 @@ public class Article extends AuditingFields {
         return Objects.hash(id);
     }
 
-    public void addHashtag(Hashtag hashtag) {
-        this.getHashtags().add(hashtag);
-    }
-
-    public void addHashtags(Collection<Hashtag> hashtags) {
-        this.getHashtags().addAll(hashtags);
+    public void addHashtags(Set<Hashtag> hashtags) {
+        this.hashtags.addAll(hashtags);
     }
 
     public void clearHashtags() {

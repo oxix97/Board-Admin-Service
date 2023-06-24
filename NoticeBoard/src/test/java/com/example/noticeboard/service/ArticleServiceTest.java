@@ -1,6 +1,7 @@
 package com.example.noticeboard.service;
 
 import com.example.noticeboard.domain.Article;
+import com.example.noticeboard.domain.Hashtag;
 import com.example.noticeboard.domain.UserAccount;
 import com.example.noticeboard.domain.type.SearchType;
 import com.example.noticeboard.dto.*;
@@ -118,19 +119,20 @@ class ArticleServiceTest {
     void test4() {
         long articleId = 1L;
         Article article = createArticle();
-        ArticleDto dto = createArticleDto("새 타이틀", "새 내용");
+        article.addHashtags(Set.of(Hashtag.of("#java")));
+        ArticleDto dto = ArticleDto.from(article);
 
         //given
         given(repository.getReferenceById(dto.id())).willReturn(article);
-
         //when
         service.updateArticle(articleId, dto);
+//        repository.flush();
 
         //then
         assertThat(article)
                 .hasFieldOrPropertyWithValue("title", dto.title())
                 .hasFieldOrPropertyWithValue("content", dto.content())
-                .hasFieldOrPropertyWithValue("hashtags", dto.hashtagDtos().stream().map(HashtagDto::hashtagName));
+                .hasFieldOrPropertyWithValue("hashtags", dto.hashtagDtos().stream().map(HashtagDto::toEntity));
         then(repository).should().getReferenceById(dto.id());
     }
 
