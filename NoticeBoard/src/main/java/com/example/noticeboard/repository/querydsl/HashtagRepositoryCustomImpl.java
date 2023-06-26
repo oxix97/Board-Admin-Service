@@ -8,8 +8,8 @@ import java.util.List;
 
 public class HashtagRepositoryCustomImpl extends QuerydslRepositorySupport implements HashtagRepositoryCustom {
 
-    public HashtagRepositoryCustomImpl(Class<?> domainClass) {
-        super(domainClass);
+    public HashtagRepositoryCustomImpl() {
+        super(Hashtag.class);
     }
 
     @Override

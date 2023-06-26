@@ -57,13 +57,13 @@ public record UserAccountDto(
         );
     }
 
-    public UserAccount toEntity(UserAccountDto dto) {
+    public UserAccount toEntity() {
         return UserAccount.of(
-                dto.userId,
-                dto.userPassword,
-                dto.email,
-                dto.nickname,
-                dto.memo
+                userId,
+                userPassword,
+                email,
+                nickname,
+                memo
         );
     }
 }
