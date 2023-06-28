@@ -22,9 +22,9 @@ public class TestSecurityConfig {
     @BeforeTestMethod // spring 기능과 관련이 있는 경우에만 사용
     public void securitySetup() {
         given(userAccountRepository.findById(anyString())).willReturn(Optional.of(UserAccount.of(
-                "security-test",
+                "test",
                 "pw",
-                "email",
+                "test@email",
                 "test-test",
                 "test memo"
         )));

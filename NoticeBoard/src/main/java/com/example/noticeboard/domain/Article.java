@@ -47,7 +47,7 @@ public class Article extends AuditingFields {
     @OrderBy("createdAt DESC")
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     @ToString.Exclude
-    private final Set<Comment> comments = new LinkedHashSet<>();
+    private Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
     protected Article() {
 
