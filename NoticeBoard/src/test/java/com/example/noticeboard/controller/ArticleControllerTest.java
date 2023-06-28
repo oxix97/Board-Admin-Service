@@ -194,7 +194,7 @@ class ArticleControllerTest {
     void test41() throws Exception {
         //given
         long articleId = 1L;
-        String userId = "security-test";
+        String userId = "test";
         willDoNothing().given(articleService).deleteArticle(articleId, userId);
         //when
         mvc.perform(post("/articles/" + articleId + "/delete")

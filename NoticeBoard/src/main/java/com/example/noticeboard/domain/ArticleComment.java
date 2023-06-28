@@ -1,8 +1,5 @@
 package com.example.noticeboard.domain;
 
-import com.example.noticeboard.domain.Article;
-import com.example.noticeboard.domain.AuditingFields;
-import com.example.noticeboard.domain.UserAccount;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,13 +11,13 @@ import java.util.Set;
 
 @Getter
 @ToString(callSuper = true)
-@Table(indexes = {
+@Table(name = "article_comment", indexes = {
         @Index(columnList = "content"),
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
 @Entity
-public class Comment extends AuditingFields {
+public class ArticleComment extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,25 +39,28 @@ public class Comment extends AuditingFields {
     @ToString.Exclude
     @OrderBy("createdAt ASC")
     @OneToMany(mappedBy = "parentCommentId", cascade = CascadeType.ALL)
-    private Set<Comment> childComments = new LinkedHashSet<>();
+    private Set<ArticleComment> childComments = new LinkedHashSet<>();
 
-    @Setter @Column(nullable = false, length = 500) private String content; // 본문
+    @Setter
+    @Column(nullable = false, length = 500)
+    private String content; // 본문
 
 
-    protected Comment() {}
+    protected ArticleComment() {
+    }
 
-    private Comment(Article article, UserAccount userAccount, Long parentCommentId, String content) {
+    private ArticleComment(Article article, UserAccount userAccount, Long parentCommentId, String content) {
         this.article = article;
         this.userAccount = userAccount;
         this.parentCommentId = parentCommentId;
         this.content = content;
     }
 
-    public static Comment of(Article article, UserAccount userAccount, String content) {
-        return new Comment(article, userAccount, null, content);
+    public static ArticleComment of(Article article, UserAccount userAccount, String content) {
+        return new ArticleComment(article, userAccount, null, content);
     }
 
-    public void addChildComment(Comment child) {
+    public void addChildComment(ArticleComment child) {
         child.setParentCommentId(this.getId());
         this.getChildComments().add(child);
     }
@@ -68,7 +68,7 @@ public class Comment extends AuditingFields {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Comment that)) return false;
+        if (!(o instanceof ArticleComment that)) return false;
         return this.getId() != null && this.getId().equals(that.getId());
     }
 
