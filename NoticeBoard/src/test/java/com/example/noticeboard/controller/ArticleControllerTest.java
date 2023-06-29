@@ -90,7 +90,7 @@ class ArticleControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
-                .andExpect(model().attributeExists("comments"));
+                .andExpect(model().attributeExists("articleComments"));
 
         //then
         then(articleService).should().getArticleWithComments(id);

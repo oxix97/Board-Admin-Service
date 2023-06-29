@@ -1,18 +1,14 @@
 package com.example.noticeboard.controller;
 
-import com.example.noticeboard.domain.Article;
-import com.example.noticeboard.domain.security.BoardPrincipal;
+import com.example.noticeboard.dto.security.BoardPrincipal;
 import com.example.noticeboard.domain.type.FormStatus;
 import com.example.noticeboard.domain.type.SearchType;
-import com.example.noticeboard.dto.ArticleDto;
-import com.example.noticeboard.dto.UserAccountDto;
 import com.example.noticeboard.dto.request.ArticleRequest;
 import com.example.noticeboard.dto.response.ArticleResponse;
 import com.example.noticeboard.dto.response.ArticleWithCommentsResponse;
 import com.example.noticeboard.service.ArticleService;
 import com.example.noticeboard.service.PaginationService;
 import lombok.RequiredArgsConstructor;
-import org.h2.engine.Mode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
