@@ -1,6 +1,6 @@
 package com.example.noticeboard.controller;
 
-import com.example.noticeboard.domain.security.BoardPrincipal;
+import com.example.noticeboard.dto.security.BoardPrincipal;
 import com.example.noticeboard.dto.request.ArticleCommentRequest;
 import com.example.noticeboard.service.ArticleCommentService;
 import lombok.RequiredArgsConstructor;
