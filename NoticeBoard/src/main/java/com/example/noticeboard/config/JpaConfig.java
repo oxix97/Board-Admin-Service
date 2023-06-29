@@ -1,6 +1,6 @@
 package com.example.noticeboard.config;
 
-import com.example.noticeboard.domain.security.BoardPrincipal;
+import com.example.noticeboard.dto.security.BoardPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
