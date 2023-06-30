@@ -18,6 +18,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.UUID;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -86,7 +88,7 @@ public class SecurityConfig {
             String registrationId = userRequest.getClientRegistration().getRegistrationId(); //kakao
             String providerId = String.valueOf(kakaoResponse.id());
             String username = registrationId + "_" + providerId;
-            String dummyPassword = encoder.encode("{bcrypt}dummy");
+            String dummyPassword = encoder.encode("{bcrypt}" + UUID.randomUUID());
             return service.searchUser(username)
                     .map(BoardPrincipal::from)
                     .orElseGet(() -> BoardPrincipal.from(
