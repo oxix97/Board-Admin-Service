@@ -33,6 +33,11 @@ dependencies {
     implementation 'com.h2database:h2'
     implementation 'org.postgresql:postgresql:42.5.4'
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api-parent:4.0.0'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
+    implementation 'org.springdoc:springdoc-openapi-javadoc:1.6.15'
+    implementation 'com.github.therapi:therapi-runtime-javadoc:0.15.0'
+//    implementation 'org.springdoc:springdoc-openapi-data-rest:1.6.15'
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
