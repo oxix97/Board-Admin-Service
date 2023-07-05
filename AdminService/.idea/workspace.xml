@@ -6,6 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="2a9efcb1-7689-4d96-9a82-c8c69febb04e" name="Changes" comment="#38 gitignore setting">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../NoticeBoard/HELP.md" beforeDir="false" afterPath="$PROJECT_DIR$/../NoticeBoard/게시판서비스.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../NoticeBoard/document/board.svg" beforeDir="false" afterPath="$PROJECT_DIR$/../NoticeBoard/document/board.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../NoticeBoard/document/use-case.drawio.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../NoticeBoard/document/use-case.svg" beforeDir="false" afterPath="$PROJECT_DIR$/../NoticeBoard/document/use-case.svg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +24,31 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="main" />
+                    <option name="lastUsedInstant" value="1688519538" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="feature/38-project-setting" />
+                    <option name="lastUsedInstant" value="1688519537" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$/.." />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -28,18 +57,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="AdminServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="AdminService.main" />
@@ -57,7 +86,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1688482263456</updated>
-      <workItem from="1688482264629" duration="2341000" />
+      <workItem from="1688482264629" duration="3545000" />
     </task>
     <task id="LOCAL-00001" summary="#38 어드민 서비스 프로젝트 세팅">
       <created>1688482448876</created>
