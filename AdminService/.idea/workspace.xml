@@ -6,10 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2a9efcb1-7689-4d96-9a82-c8c69febb04e" name="Changes" comment="#38 gitignore setting">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../NoticeBoard/HELP.md" beforeDir="false" afterPath="$PROJECT_DIR$/../NoticeBoard/게시판서비스.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../NoticeBoard/document/board.svg" beforeDir="false" afterPath="$PROJECT_DIR$/../NoticeBoard/document/board.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../NoticeBoard/document/use-case.drawio.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../NoticeBoard/document/use-case.svg" beforeDir="false" afterPath="$PROJECT_DIR$/../NoticeBoard/document/use-case.svg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +82,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1688482263456</updated>
-      <workItem from="1688482264629" duration="3545000" />
+      <workItem from="1688482264629" duration="3800000" />
     </task>
     <task id="LOCAL-00001" summary="#38 어드민 서비스 프로젝트 세팅">
       <created>1688482448876</created>
