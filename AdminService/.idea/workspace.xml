@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a9efcb1-7689-4d96-9a82-c8c69febb04e" name="Changes" comment="#38 gitignore setting">
+    <list default="true" id="2a9efcb1-7689-4d96-9a82-c8c69febb04e" name="Changes" comment="gitignore setting">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,12 +30,12 @@
               <option name="branches">
                 <list>
                   <RecentBranch>
-                    <option name="branchName" value="main" />
-                    <option name="lastUsedInstant" value="1688519538" />
+                    <option name="branchName" value="feature/41-database-setting" />
+                    <option name="lastUsedInstant" value="1688523020" />
                   </RecentBranch>
                   <RecentBranch>
-                    <option name="branchName" value="feature/38-project-setting" />
-                    <option name="lastUsedInstant" value="1688519537" />
+                    <option name="branchName" value="main" />
+                    <option name="lastUsedInstant" value="1688519538" />
                   </RecentBranch>
                 </list>
               </option>
@@ -55,6 +56,10 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
@@ -62,11 +67,26 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.customizations&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
   }
 }</component>
   <component name="RunManager">
     <configuration name="AdminServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <option name="ACTIVE_PROFILES" />
+      <envs>
+        <env name="KAKAO_OAUTH_CLIENT_ID" value="cdd5f90fa72366b7645091c799791ed7" />
+        <env name="KAKAO_OAUTH_CLIENT_SECRET" value="67Yj3m4j8JGQAh1ogHtd4LpiV13eGplj" />
+        <env name="LOCAL_DB_URL" value="jdbc:mysql://localhost:3306/board" />
+        <env name="LOCAL_DB_USER_PASSWORD" value="123" />
+        <env name="LOCAL_DB_USERNAME" value="chan" />
+        <env name="VAULT_TOKEN" value="hvs.lddzSMOijXwjfgJg0fbhLoTa" />
+      </envs>
       <module name="AdminService.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.adminservice.AdminServiceApplication" />
       <method v="2">
@@ -82,7 +102,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1688482263456</updated>
-      <workItem from="1688482264629" duration="3800000" />
+      <workItem from="1688482264629" duration="5057000" />
     </task>
     <task id="LOCAL-00001" summary="#38 어드민 서비스 프로젝트 세팅">
       <created>1688482448876</created>
@@ -98,7 +118,14 @@
       <option name="project" value="LOCAL" />
       <updated>1688482595836</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="gitignore setting">
+      <created>1688522143907</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1688522143907</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -118,6 +145,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="#38 어드민 서비스 프로젝트 세팅" />
     <MESSAGE value="#38 gitignore setting" />
-    <option name="LAST_COMMIT_MESSAGE" value="#38 gitignore setting" />
+    <MESSAGE value="gitignore setting" />
+    <option name="LAST_COMMIT_MESSAGE" value="gitignore setting" />
   </component>
 </project>
