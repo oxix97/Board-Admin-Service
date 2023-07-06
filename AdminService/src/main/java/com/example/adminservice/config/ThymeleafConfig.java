@@ -22,9 +22,6 @@ public class ThymeleafConfig {
         return defaultTemplateResolver;
     }
 
-
-    @RequiredArgsConstructor
-    @Getter
     @ConfigurationProperties("spring.thymeleaf3")
     public record Thymeleaf3Properties(boolean decoupledLogic) {
     }

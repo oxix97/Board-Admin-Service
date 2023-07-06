@@ -8,7 +8,7 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
 spring:
-  application.name: test-board
+  application.name: admin-service
 #  cloud.vault:
 #    scheme: http
 #    authentication: TOKEN
