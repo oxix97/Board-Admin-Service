@@ -18,7 +18,7 @@ public class RoleTypesConverter implements AttributeConverter<Set<RoleType>, Str
         return attribute.stream()
                 .map(RoleType::name)
                 .sorted()
-                .collect(Collectors.joining());
+                .collect(Collectors.joining(DELIMITER));
     }
 
     @Override
