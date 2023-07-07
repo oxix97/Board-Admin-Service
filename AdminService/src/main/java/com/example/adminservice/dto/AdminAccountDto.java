@@ -1,15 +1,15 @@
 package com.example.adminservice.dto;
 
-import com.example.adminservice.domain.UserAccount;
+import com.example.adminservice.domain.AdminAccount;
 import com.example.adminservice.domain.constant.RoleType;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
- * A DTO for the {@link com.example.adminservice.domain.UserAccount} entity
+ * A DTO for the {@link AdminAccount} entity
  */
-public record UserAccountDto(
+public record AdminAccountDto(
         String userId,
         String userPassword,
         Set<RoleType> roleTypes,
@@ -21,7 +21,7 @@ public record UserAccountDto(
         LocalDateTime modifiedAt,
         String modifiedBy
 ) {
-    public static UserAccountDto of(
+    public static AdminAccountDto of(
             String userId,
             String userPassword,
             Set<RoleType> roleTypes,
@@ -33,10 +33,10 @@ public record UserAccountDto(
             LocalDateTime modifiedAt,
             String modifiedBy
     ) {
-        return new UserAccountDto(userId, userPassword,roleTypes, email, nickname, memo, createdAt, createdBy, modifiedAt, modifiedBy);
+        return new AdminAccountDto(userId, userPassword,roleTypes, email, nickname, memo, createdAt, createdBy, modifiedAt, modifiedBy);
     }
 
-    public static UserAccountDto of(
+    public static AdminAccountDto of(
             String userId,
             String userPassword,
             Set<RoleType> roleTypes,
@@ -44,12 +44,12 @@ public record UserAccountDto(
             String nickname,
             String memo
     ) {
-        return new UserAccountDto(userId, userPassword,roleTypes, email, nickname, memo, null, null, null, null);
+        return new AdminAccountDto(userId, userPassword,roleTypes, email, nickname, memo, null, null, null, null);
     }
 
 
-    public static UserAccountDto from(UserAccount entity) {
-        return new UserAccountDto(
+    public static AdminAccountDto from(AdminAccount entity) {
+        return new AdminAccountDto(
                 entity.getUserId(),
                 entity.getUserPassword(),
                 entity.getRoleTypes(),
@@ -63,8 +63,8 @@ public record UserAccountDto(
         );
     }
 
-    public UserAccount toEntity() {
-        return UserAccount.of(
+    public AdminAccount toEntity() {
+        return AdminAccount.of(
                 userId,
                 userPassword,
                 roleTypes,
