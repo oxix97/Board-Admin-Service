@@ -3,6 +3,7 @@ package com.example.adminservice.controller;
 import com.example.adminservice.config.SecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -18,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AdminAccountManagementControllerTest {
     private final MockMvc mvc;
 
-    public AdminAccountManagementControllerTest(MockMvc mvc) {
+    public AdminAccountManagementControllerTest(@Autowired MockMvc mvc) {
         this.mvc = mvc;
     }
 
@@ -31,7 +32,7 @@ class AdminAccountManagementControllerTest {
         mvc.perform(get("/management/admin"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(view().name("/management/admin"));
+                .andExpect(view().name("management/admin"));
 
         //then
 
