@@ -4,11 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/management/admin")
+@RequestMapping("/management/user-accounts")
 @Controller
-public class AdminAccountManagementController {
+public class UserAccountManagementController {
     @GetMapping
     public String managementAdmin() {
-        return "management/admin";
+        return "management/user-accounts";
     }
 }

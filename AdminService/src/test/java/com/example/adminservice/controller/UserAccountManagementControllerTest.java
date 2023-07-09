@@ -9,17 +9,16 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("[VIEW] 회원 관리")
 @Import(SecurityConfig.class)
-@WebMvcTest(AdminAccountManagementController.class)
-class AdminAccountManagementControllerTest {
+@WebMvcTest(UserAccountManagementController.class)
+class UserAccountManagementControllerTest {
     private final MockMvc mvc;
 
-    public AdminAccountManagementControllerTest(@Autowired MockMvc mvc) {
+    public UserAccountManagementControllerTest(@Autowired MockMvc mvc) {
         this.mvc = mvc;
     }
 
@@ -29,10 +28,10 @@ class AdminAccountManagementControllerTest {
         //given
 
         //when
-        mvc.perform(get("/management/admin"))
+        mvc.perform(get("/management/user-accounts"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(view().name("management/admin"));
+                .andExpect(view().name("management/user-accounts"));
 
         //then
 
