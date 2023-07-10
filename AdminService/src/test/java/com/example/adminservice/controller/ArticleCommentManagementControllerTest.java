@@ -1,6 +1,6 @@
 package com.example.adminservice.controller;
 
-import com.example.adminservice.config.SecurityConfig;
+import com.example.adminservice.config.TestSecurityConfig;
 import com.example.adminservice.dto.ArticleCommentDto;
 import com.example.adminservice.dto.UserAccountDto;
 import com.example.adminservice.service.ArticleCommentManagementService;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("[VIEW] 댓글 관리")
-@Import(SecurityConfig.class)
+@Import(TestSecurityConfig.class)
 @WebMvcTest(ArticleCommentManagementController.class)
 class ArticleCommentManagementControllerTest {
     private final MockMvc mvc;

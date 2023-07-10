@@ -1,6 +1,7 @@
 package com.example.adminservice.controller;
 
 import com.example.adminservice.config.SecurityConfig;
+import com.example.adminservice.config.TestSecurityConfig;
 import com.example.adminservice.dto.ArticleDto;
 import com.example.adminservice.dto.UserAccountDto;
 import com.example.adminservice.service.ArticleManagementService;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("[VIEW] 게시글 관리")
-@Import(SecurityConfig.class)
+@Import(TestSecurityConfig.class)
 @WebMvcTest(ArticleManagementController.class)
 class ArticleManagementControllerTest {
     private final MockMvc mvc;
