@@ -6,6 +6,7 @@ logging:
     com.example.noticeboard: debug
     org.springframework.web.servlet: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.springframework.web.client.RestTemplate: debug
 
 spring:
   application.name: admin-service
