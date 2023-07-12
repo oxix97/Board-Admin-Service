@@ -11,13 +11,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.BDDMockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("[VIEW] 댓글 관리")
@@ -44,7 +47,7 @@ class ArticleCommentManagementControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("management/article-comments"))
-                .andExpect(model().attribute("comments", List.of()));
+                .andExpect(model().attribute("article-comments", List.of()));
 
         //then
         then(service).should().getArticleComments();
@@ -66,9 +69,10 @@ class ArticleCommentManagementControllerTest {
                 .andExpect(jsonPath("$.content").value(comment.content()));
 
         //then
-        then(service).should().getArticleComments();
+        then(service).should().getArticleComment(id);
     }
 
+    @WithMockUser(value = "test", roles = "ADMIN")
     @DisplayName("[DELETE] 댓글 삭제 - 정상 호출")
     @Test
     void givenNothing_whenRequestingDeletion_thenRedirectsToArticleCommentManagementView() throws Exception {
@@ -77,7 +81,7 @@ class ArticleCommentManagementControllerTest {
         willDoNothing().given(service).deleteArticleComment(id);
 
         //when
-        mvc.perform(get("/management/article-comments/" + id + "/delete"))
+        mvc.perform(post("/management/article-comments/" + id).with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/management/article-comments"))
                 .andExpect(redirectedUrl("/management/article-comments"));
