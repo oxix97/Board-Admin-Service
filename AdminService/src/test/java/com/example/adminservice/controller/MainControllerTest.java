@@ -1,6 +1,7 @@
 package com.example.adminservice.controller;
 
 import com.example.adminservice.config.SecurityConfig;
+import com.example.adminservice.config.TestSecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("[VIEW] 루트 컨트롤러")
 @WebMvcTest(MainController.class)
-@Import(SecurityConfig.class)
+@Import(TestSecurityConfig.class)
 class MainControllerTest {
     private final MockMvc mvc;
 
