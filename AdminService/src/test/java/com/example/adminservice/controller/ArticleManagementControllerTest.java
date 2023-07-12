@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -19,8 +20,7 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("[VIEW] 게시글 관리")
@@ -53,11 +53,6 @@ class ArticleManagementControllerTest {
         then(service).should().getArticles();
     }
 
-    /*
-     * 1. 단건 게시글 조회
-     * 2. 게시글 삭제
-     * */
-
     @DisplayName("[GET] 게시글 단건 - 정상 호출")
     @Test
     void givenNothing_whenRequestingArticleManagementView_thenReturnView() throws Exception {
@@ -79,6 +74,7 @@ class ArticleManagementControllerTest {
         then(service).should().getArticle(id);
     }
 
+    @WithMockUser(username = "test1",roles = "ADMIN")
     @DisplayName("[DELETE] 게시글 삭제 - 정상 호출")
     @Test
     void givenNothing_whenRequestingDeletion_thenRedirectsToArticleManagementView() throws Exception {

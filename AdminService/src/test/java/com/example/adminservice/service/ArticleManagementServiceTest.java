@@ -34,7 +34,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @DisplayName("[비즈니스 로직] 게시글 관리")
 class ArticleManagementServiceTest {
 
-    //    @Disabled("실제 API 호출 결과를 관찰하는 목적으로 평상시에 비활성화")
+    @Disabled("실제 API 호출 결과를 관찰하는 목적으로 평상시에 비활성화")
     @DisplayName("실제 API 호출 테스트")
     @SpringBootTest
     @Nested
@@ -106,7 +106,7 @@ class ArticleManagementServiceTest {
                     .hasFieldOrPropertyWithValue("id", expectedArticle.id())
                     .hasFieldOrPropertyWithValue("title", expectedArticle.title())
                     .hasFieldOrPropertyWithValue("content", expectedArticle.content())
-                    .hasFieldOrPropertyWithValue("nickname", expectedArticle.userAccount().nickname());
+                    .hasFieldOrPropertyWithValue("userAccount.nickname", expectedArticle.userAccount().nickname());
 
             server.verify();
         }
@@ -132,7 +132,7 @@ class ArticleManagementServiceTest {
                     .hasFieldOrPropertyWithValue("id", expectedArticle.id())
                     .hasFieldOrPropertyWithValue("title", expectedArticle.title())
                     .hasFieldOrPropertyWithValue("content", expectedArticle.content())
-                    .hasFieldOrPropertyWithValue("nickname", expectedArticle.userAccount().nickname());
+                    .hasFieldOrPropertyWithValue("userAccount.nickname", expectedArticle.userAccount().nickname());
 
             server.verify();
         }
@@ -144,7 +144,7 @@ class ArticleManagementServiceTest {
             Long id = 1L;
 
             server
-                    .expect(requestTo(properties.board().url() + "/api/articles/" + id))
+                    .expect(requestTo(properties.board().url() + "/api/articles/" + id + "/delete"))
                     .andExpect(method(HttpMethod.DELETE))
                     .andRespond(withSuccess());
 
