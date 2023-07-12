@@ -7,6 +7,7 @@ import com.example.adminservice.dto.properties.ProjectProperties;
 import com.example.adminservice.dto.response.ArticleCommentClientResponse;
 import com.example.adminservice.service.ArticleCommentManagementService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import java.time.LocalDateTime;
@@ -28,9 +30,11 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
+@ActiveProfiles("test")
 @DisplayName("[비즈니스 로직] 댓글 관리")
 class ArticleCommentManagementServiceTest {
 
+    @Disabled()
     @DisplayName("실제 API 호출 테스트")
     @SpringBootTest
     @Nested
@@ -87,7 +91,7 @@ class ArticleCommentManagementServiceTest {
             ArticleCommentDto expected = createArticleCommentDto("대앳글");
             ArticleCommentClientResponse expectedResponse = ArticleCommentClientResponse.of(List.of(expected));
             server
-                    .expect(requestTo(properties.board().url() + "/api/article-comments"))
+                    .expect(requestTo(properties.board().url() + "/api/articleComments?size=10000"))
                     .andRespond(withSuccess(
                             mapper.writeValueAsString(expectedResponse),
                             MediaType.APPLICATION_JSON
@@ -112,7 +116,7 @@ class ArticleCommentManagementServiceTest {
             Long commentId = 1L;
             ArticleCommentDto expected = createArticleCommentDto(commentId, "댓글");
             server
-                    .expect(requestTo(properties.board().url() + "/api/article-comments/" + commentId))
+                    .expect(requestTo(properties.board().url() + "/api/articleComments/" + commentId))
                     .andRespond(withSuccess(
                             mapper.writeValueAsString(expected),
                             MediaType.APPLICATION_JSON
@@ -137,7 +141,7 @@ class ArticleCommentManagementServiceTest {
             //given
             Long id = 1L;
             server
-                    .expect(requestTo(properties.board().url() + "/api/article-comments/" + id + "/delete"))
+                    .expect(requestTo(properties.board().url() + "/api/articleComments/" + id + "/delete"))
                     .andExpect(method(HttpMethod.DELETE))
                     .andRespond(withSuccess());
 
