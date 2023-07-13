@@ -33,7 +33,7 @@ public record AdminAccountDto(
             LocalDateTime modifiedAt,
             String modifiedBy
     ) {
-        return new AdminAccountDto(userId, userPassword,roleTypes, email, nickname, memo, createdAt, createdBy, modifiedAt, modifiedBy);
+        return new AdminAccountDto(userId, userPassword, roleTypes, email, nickname, memo, createdAt, createdBy, modifiedAt, modifiedBy);
     }
 
     public static AdminAccountDto of(
@@ -44,7 +44,7 @@ public record AdminAccountDto(
             String nickname,
             String memo
     ) {
-        return new AdminAccountDto(userId, userPassword,roleTypes, email, nickname, memo, null, null, null, null);
+        return AdminAccountDto.of(userId, userPassword, roleTypes, email, nickname, memo, null, null, null, null);
     }
 
 

@@ -1,6 +1,5 @@
 package com.example.adminservice.service;
 
-import com.example.adminservice.config.SecurityConfig;
 import com.example.adminservice.domain.AdminAccount;
 import com.example.adminservice.domain.constant.RoleType;
 import com.example.adminservice.dto.AdminAccountDto;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.annotation.Import;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +62,7 @@ class AdminAccountServiceTest {
     @Test
     void givenUserParams_whenSaving_thenSavesAdminAccount() {
         // Given
-        AdminAccount adminAccount = createSigningUpAdminAccount("uno", Set.of(RoleType.USER));
+        AdminAccount adminAccount = createSigningUpAdminAccount("test", Set.of(RoleType.USER));
         given(adminAccountRepository.save(adminAccount)).willReturn(adminAccount);
 
         // When
@@ -87,6 +85,7 @@ class AdminAccountServiceTest {
                 .hasFieldOrPropertyWithValue("memo", adminAccount.getMemo())
                 .hasFieldOrPropertyWithValue("createdBy", adminAccount.getUserId())
                 .hasFieldOrPropertyWithValue("modifiedBy", adminAccount.getUserId());
+
         then(adminAccountRepository).should().save(adminAccount);
     }
 
@@ -97,7 +96,7 @@ class AdminAccountServiceTest {
         given(adminAccountRepository.findAll()).willReturn(List.of());
 
         // When
-        List<AdminAccountDto> result = service.getUsers();
+        List<AdminAccountDto> result = service.users();
 
         // Then
         assertThat(result).hasSize(0);
@@ -120,7 +119,7 @@ class AdminAccountServiceTest {
 
 
     private AdminAccount createAdminAccount(String username) {
-        return createAdminAccount(username, Set.of(RoleType.USER), null);
+        return createAdminAccount(username, Set.of(RoleType.USER), username);
     }
 
     private AdminAccount createSigningUpAdminAccount(String username, Set<RoleType> roleTypes) {
