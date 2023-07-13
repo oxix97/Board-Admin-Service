@@ -58,7 +58,7 @@ public class AdminAccount extends AuditingFields {
     }
 
     public static AdminAccount of(String userId, String userPassword, Set<RoleType> roleTypes, String email, String nickname, String memo) {
-        return AdminAccount.of(userId, userPassword, roleTypes, email, nickname, memo, null);
+        return AdminAccount.of(userId, userPassword, roleTypes, email, nickname, memo, userId);
     }
 
     public static AdminAccount of(String userId, String userPassword, Set<RoleType> roleTypes, String email, String nickname, String memo, String createdBy) {
