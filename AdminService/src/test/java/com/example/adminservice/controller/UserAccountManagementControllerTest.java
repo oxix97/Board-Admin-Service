@@ -1,5 +1,6 @@
 package com.example.adminservice.controller;
 
+import com.example.adminservice.config.GlobalControllerConfig;
 import com.example.adminservice.config.SecurityConfig;
 import com.example.adminservice.config.TestSecurityConfig;
 import com.example.adminservice.dto.UserAccountDto;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("컨트롤러 - 회원 관리")
-@Import(TestSecurityConfig.class)
+@Import({TestSecurityConfig.class, GlobalControllerConfig.class})
 @WebMvcTest(UserAccountManagementController.class)
 class UserAccountManagementControllerTest {
 
