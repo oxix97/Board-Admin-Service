@@ -1,5 +1,6 @@
 package com.example.adminservice.controller;
 
+import com.example.adminservice.config.GlobalControllerConfig;
 import com.example.adminservice.config.SecurityConfig;
 import com.example.adminservice.config.TestSecurityConfig;
 import com.example.adminservice.dto.ArticleDto;
@@ -7,6 +8,7 @@ import com.example.adminservice.dto.UserAccountDto;
 import com.example.adminservice.service.ArticleManagementService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.configuration.GlobalConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("[VIEW] 게시글 관리")
-@Import(TestSecurityConfig.class)
+@Import({TestSecurityConfig.class, GlobalControllerConfig.class})
 @WebMvcTest(ArticleManagementController.class)
 class ArticleManagementControllerTest {
     private final MockMvc mvc;
@@ -36,6 +38,7 @@ class ArticleManagementControllerTest {
         this.mvc = mvc;
     }
 
+    @WithMockUser(value = "test", roles = "USER")
     @DisplayName("[GET] 게시글 관리 페이지 - 정상 호출")
     @Test
     void givenNothing_whenRequestingArticlesManagementView_thenReturnView() throws Exception {
@@ -52,7 +55,7 @@ class ArticleManagementControllerTest {
         //then
         then(service).should().getArticles();
     }
-
+    @WithMockUser(value = "test", roles = "USER")
     @DisplayName("[GET] 게시글 단건 - 정상 호출")
     @Test
     void givenNothing_whenRequestingArticleManagementView_thenReturnView() throws Exception {

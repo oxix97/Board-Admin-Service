@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
@@ -118,7 +119,7 @@ class ArticleManagementServiceTest {
             Long id = 1L;
             ArticleDto expectedArticle = createArticleDto("제목", "본문");
             server
-                    .expect(requestTo(properties.board().url() + "/api/articles/" + id))
+                    .expect(requestTo(properties.board().url() + "/api/articles/" + id + "?projection=withUserAccount"))
                     .andRespond(withSuccess(
                             mapper.writeValueAsString(expectedArticle),
                             MediaType.APPLICATION_JSON
