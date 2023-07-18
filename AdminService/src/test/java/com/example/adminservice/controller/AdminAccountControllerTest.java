@@ -1,5 +1,6 @@
 package com.example.adminservice.controller;
 
+import com.example.adminservice.config.GlobalControllerConfig;
 import com.example.adminservice.config.SecurityConfig;
 import com.example.adminservice.domain.constant.RoleType;
 import com.example.adminservice.dto.AdminAccountDto;
@@ -28,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("컨트롤러 - 어드민 회원")
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, GlobalControllerConfig.class})
 @WebMvcTest(AdminAccountController.class)
 class AdminAccountControllerTest {
 
@@ -88,7 +89,7 @@ class AdminAccountControllerTest {
         mvc.perform(
                 delete("/api/admin/members/" + username).with(csrf())
         ).andExpect(status().isNoContent());
-        
+
         then(adminAccountService).should().deleteUser(username);
     }
 

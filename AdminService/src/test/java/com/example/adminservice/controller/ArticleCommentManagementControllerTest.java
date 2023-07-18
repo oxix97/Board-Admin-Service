@@ -1,5 +1,6 @@
 package com.example.adminservice.controller;
 
+import com.example.adminservice.config.GlobalControllerConfig;
 import com.example.adminservice.config.TestSecurityConfig;
 import com.example.adminservice.dto.ArticleCommentDto;
 import com.example.adminservice.dto.UserAccountDto;
@@ -24,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("[VIEW] 댓글 관리")
-@Import(TestSecurityConfig.class)
+@Import({TestSecurityConfig.class, GlobalControllerConfig.class})
 @WebMvcTest(ArticleCommentManagementController.class)
 class ArticleCommentManagementControllerTest {
     private final MockMvc mvc;
@@ -36,6 +37,7 @@ class ArticleCommentManagementControllerTest {
         this.mvc = mvc;
     }
 
+    @WithMockUser(value = "test", roles = "USER")
     @DisplayName("[GET] 댓글 관리 페이지 - 정상 호출")
     @Test
     void givenNothing_whenRequestingArticleManagementView_thenReturnView() throws Exception {
@@ -53,6 +55,7 @@ class ArticleCommentManagementControllerTest {
         then(service).should().getArticleComments();
     }
 
+    @WithMockUser(value = "test", roles = "ADMIN")
     @DisplayName("[GET] 단일 댓글 관리 페이지 - 정상 호출")
     @Test
     void givenArticleCommentId_whenRequestingArticleCommentManagementView_thenReturnView() throws Exception {
